@@ -86,26 +86,22 @@ function createsingleitem(good) {
       quantity: quantity,
       totalprice: quantity * good.price,
     };
-    console.log(cartdata);
-    let y = state.cart.find(function (data) {
-      return data === cartdata;
-    });
-    console.log(y);
 
-    if (state.cart.includes(cartdata)) {
-      console.log(state.cart);
+    let exist = state.cart.findIndex(function (data) {
+      return data.id === cartdata.id;
+    });
+    console.log(exist);
+    if (exist >= 0) {
     } else {
-      additemtocard(good, quantity);
-      console.log(state.cart);
+      additemtocart(good, quantity);
     }
   });
   divEl.append(imgEl, btnEl);
   grocerylist.append(divEl);
-
   return grocerylist;
 }
 
-function additemtocard(good, quantity) {
+function additemtocart(good, quantity) {
   let ulincart = document.querySelector(".cart--item-list");
   let listincart = document.createElement("li");
   listincart.setAttribute("class", "list-in-cart");
@@ -172,6 +168,7 @@ function additemtocard(good, quantity) {
   };
   state.cart.push(cartdata);
   calculateprice();
+  return listincart;
 }
 function calculateprice() {
   let total = 0;
