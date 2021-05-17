@@ -87,6 +87,11 @@ function createsingleitem(good) {
       totalprice: quantity * good.price,
     };
     console.log(cartdata);
+    let y = state.cart.find(function (data) {
+      return data === cartdata;
+    });
+    console.log(y);
+
     if (state.cart.includes(cartdata)) {
       console.log(state.cart);
     } else {
