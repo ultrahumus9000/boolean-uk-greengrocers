@@ -38,12 +38,12 @@ This is how an item object should look like
 
 const state = {
   goods: [
-    { id: "001-beetroot", name: "beetroot", price: 1, stock: 5, cart: false },
-    { id: "002-carrot", name: "carrot", price: 2, stock: 5, cart: false },
-    { id: "003-apple", name: "apple", price: 3, stock: 5, cart: false },
-    { id: "004-apricot", name: "apricot", price: 4, stock: 5, cart: false },
-    { id: "005-avocado", name: "avacado", price: 5, stock: 5, cart: false },
-    { id: "006-bananas", name: "bananas", price: 6, stock: 5, cart: false },
+    { id: "001-beetroot", name: "beetroot", price: 1, stock: 5 },
+    { id: "002-carrot", name: "carrot", price: 2, stock: 5 },
+    { id: "003-apple", name: "apple", price: 3, stock: 5 },
+    { id: "004-apricot", name: "apricot", price: 4, stock: 5 },
+    { id: "005-avocado", name: "avacado", price: 5, stock: 5 },
+    { id: "006-bananas", name: "bananas", price: 6, stock: 5 },
     {
       id: "007-bell-pepper",
       name: "bellpepper",
