@@ -67,6 +67,7 @@ function creategrocerielists() {
 }
 
 function createsingleitem(good) {
+  let quantity = 0;
   const grocerylist = document.createElement("li");
   const divEl = document.createElement("div");
   divEl.setAttribute("class", "store--item-icon");
@@ -77,22 +78,35 @@ function createsingleitem(good) {
   const btnEl = document.createElement("button");
   btnEl.innerText = "Add to cart";
   btnEl.addEventListener("click", function () {
-    additemtocard(good);
+    quantity++;
+    const cartdata = {
+      id: good.id,
+      name: good.name,
+      price: good.price,
+      quantity: quantity,
+      totalprice: quantity * good.price,
+    };
+    console.log(cartdata);
+    if (state.cart.includes(cartdata)) {
+      console.log(state.cart);
+    } else {
+      additemtocard(good, quantity);
+      console.log(state.cart);
+    }
   });
   divEl.append(imgEl, btnEl);
   grocerylist.append(divEl);
+
   return grocerylist;
 }
 
-function additemtocard(good) {
+function additemtocard(good, quantity) {
   let ulincart = document.querySelector(".cart--item-list");
   let listincart = document.createElement("li");
   listincart.setAttribute("class", "list-in-cart");
   let imgincart = document.createElement("img");
   imgincart.setAttribute("class", "cart--item-icon");
   imgincart.setAttribute("src", `assets/icons/${good.id}.svg`);
-
-  let quantity = 1;
 
   let pincart = document.createElement("p");
   pincart.innerText = good.name;
@@ -151,9 +165,7 @@ function additemtocard(good) {
     quantity: quantity,
     totalprice: quantity * [good.price],
   };
-  console.log(quantity);
   state.cart.push(cartdata);
-  console.log(state.cart);
   calculateprice();
 }
 function calculateprice() {
@@ -163,7 +175,6 @@ function calculateprice() {
     total = total + item.totalprice;
   }
   totalprice.innerText = `£ ${total}`;
-  console.log(total);
 }
 
 creategrocerielists();
