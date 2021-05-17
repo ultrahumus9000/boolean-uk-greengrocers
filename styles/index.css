@@ -13,9 +13,9 @@ h2 {
 
 button {
   padding: 0.25rem 0.5rem;
-
   text-transform: uppercase;
   font-size: 0.725rem;
+  margin: 4px;
 }
 
 /* Store */
@@ -23,9 +23,7 @@ button {
 #store {
   height: 40vh;
   padding: 1rem;
-
   overflow-y: scroll;
-
   background-color: #e7f4ea;
 }
 
@@ -42,13 +40,14 @@ button {
 
 .store--item-list li {
   display: grid;
-  place-items: center;
-  grid-row-gap: 0.5rem;
+  justify-items: center;
+  grid-row-gap: 1rem;
+  margin: 12px;
 }
 
 .store--item-icon {
-  width: 125px;
-  height: 125px;
+  width: 110px;
+  height: 110px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -179,4 +178,19 @@ button {
     border-top: 2px solid #00675b;
     border-bottom: 2px solid #00675b;
   }
+}
+
+.list-in-cart p {
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+nav {
+  display: grid;
+  grid-template-columns: 40% 30% 30%;
+  margin-top: 5px;
+  place-items: left;
+}
+nav li {
+  list-style: none;
+  border-bottom: 2px solid pink;
 }
