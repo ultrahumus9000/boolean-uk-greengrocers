@@ -59,7 +59,7 @@ const state = {
 };
 
 function creategrocerielists() {
-  const groceryboard = document.querySelector("ul");
+  const groceryboard = document.querySelector(".item-list.store--item-list");
   for (const good of state.goods) {
     let grocerylist = createsingleitem(good);
     groceryboard.append(grocerylist);
@@ -79,23 +79,16 @@ function createsingleitem(good) {
   btnEl.innerText = "Add to cart";
   btnEl.addEventListener("click", function () {
     quantity++;
-    const cartdata = {
-      id: good.id,
-      name: good.name,
-      price: good.price,
-      quantity: quantity,
-    };
-
     let exist = state.cart.find(function (data) {
-      return data.id === cartdata.id;
+      return data.id === good.id;
     });
-    console.log(exist);
+    console.log(state.cart);
     if (exist) {
       let spanincart = document.querySelector(`.${good.name}`);
       increaseQuantity(exist, spanincart);
       console.log(state.cart);
-      calculateprice();
     } else {
+      let quantity = 1;
       additemtocart(good, quantity);
     }
   });
@@ -158,6 +151,7 @@ function additemtocart(good, quantity) {
   calculateprice();
   return listincart;
 }
+
 function calculateprice() {
   let total = 0;
   let totalprice = document.querySelector(".total-number");
@@ -167,7 +161,6 @@ function calculateprice() {
   totalprice.innerText = `£ ${total}`;
 }
 
-creategrocerielists();
 function increaseQuantity(cartdata, spanincart) {
   ++cartdata.quantity;
   spanincart.innerText = cartdata.quantity;
@@ -177,7 +170,6 @@ function increaseQuantity(cartdata, spanincart) {
     spanincart.innerText = 5;
   }
   calculateprice();
-  console.log(state.cart);
 }
 
 function decrease(cartdata, spanincart, listincart) {
@@ -188,5 +180,6 @@ function decrease(cartdata, spanincart, listincart) {
     state.cart.pop();
   }
   calculateprice();
-  console.log(state.cart);
 }
+
+creategrocerielists();
