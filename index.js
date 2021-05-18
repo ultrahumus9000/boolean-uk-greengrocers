@@ -51,9 +51,9 @@ const state = {
       stock: 5,
       cart: false,
     },
-    { id: "008-berry", name: "berry", price: 8, stock: 5, cart: false },
-    { id: "009-blueberry", name: "blueberry", price: 9, stock: 5, cart: false },
-    { id: "010-eggplant", name: "eggplant", price: 10, stock: 5, cart: false },
+    { id: "008-berry", name: "berry", price: 8, stock: 5 },
+    { id: "009-blueberry", name: "blueberry", price: 9, stock: 5 },
+    { id: "010-eggplant", name: "eggplant", price: 10, stock: 5 },
   ],
   cart: [],
 };
@@ -84,14 +84,17 @@ function createsingleitem(good) {
       name: good.name,
       price: good.price,
       quantity: quantity,
-      totalprice: quantity * good.price,
     };
 
-    let exist = state.cart.findIndex(function (data) {
+    let exist = state.cart.find(function (data) {
       return data.id === cartdata.id;
     });
     console.log(exist);
-    if (exist >= 0) {
+    if (exist) {
+      let spanincart = document.querySelector(`.${good.name}`);
+      increaseQuantity(exist, spanincart);
+      console.log(state.cart);
+      calculateprice();
     } else {
       additemtocart(good, quantity);
     }
@@ -121,33 +124,19 @@ function additemtocart(good, quantity) {
   btnminusincart.innerText = "-";
 
   btnminusincart.addEventListener("click", function () {
-    quantity--;
-    if (quantity <= 0) {
-      listincart.remove();
-    }
-    spanincart.innerText = quantity;
-    state.cart.pop();
-    calculateprice();
+    decrease(cartdata, spanincart, listincart);
   });
 
   let spanincart = document.createElement("span");
-  spanincart.setAttribute("class", "quantity-text center");
+  spanincart.setAttribute("class", `quantity-text center ${good.name}`);
+
   spanincart.innerText = quantity;
 
   let btnplusincart = document.createElement("button");
   btnplusincart.setAttribute("class", "quantity-btn remove-btn center");
   btnplusincart.innerText = "+";
   btnplusincart.addEventListener("click", function () {
-    ++quantity;
-    spanincart.innerText = quantity;
-    if (quantity > 5) {
-      alert("no more stock");
-      quantity = 5;
-      spanincart.innerText = 5;
-    }
-
-    state.cart.push(cartdata);
-    calculateprice();
+    increaseQuantity(cartdata, spanincart);
   });
 
   listincart.append(
@@ -164,7 +153,6 @@ function additemtocart(good, quantity) {
     name: good.name,
     price: good.price,
     quantity: quantity,
-    totalprice: quantity * [good.price],
   };
   state.cart.push(cartdata);
   calculateprice();
@@ -174,9 +162,31 @@ function calculateprice() {
   let total = 0;
   let totalprice = document.querySelector(".total-number");
   for (const item of state.cart) {
-    total = total + item.totalprice;
+    total = total + item.quantity * item.price;
   }
   totalprice.innerText = `£ ${total}`;
 }
 
 creategrocerielists();
+function increaseQuantity(cartdata, spanincart) {
+  ++cartdata.quantity;
+  spanincart.innerText = cartdata.quantity;
+  if (cartdata.quantity > 5) {
+    alert("no more stock");
+    cartdata.quantity = 5;
+    spanincart.innerText = 5;
+  }
+  calculateprice();
+  console.log(state.cart);
+}
+
+function decrease(cartdata, spanincart, listincart) {
+  --cartdata.quantity;
+  spanincart.innerText = cartdata.quantity;
+  if (cartdata.quantity <= 0) {
+    listincart.remove();
+    state.cart.pop();
+  }
+  calculateprice();
+  console.log(state.cart);
+}
