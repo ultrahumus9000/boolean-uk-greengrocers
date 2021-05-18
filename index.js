@@ -82,11 +82,9 @@ function createsingleitem(good) {
     let exist = state.cart.find(function (data) {
       return data.id === good.id;
     });
-    console.log(state.cart);
     if (exist) {
       let spanincart = document.querySelector(`.${good.name}`);
       increaseQuantity(exist, spanincart);
-      console.log(state.cart);
     } else {
       let quantity = 1;
       additemtocart(good, quantity);
