@@ -39,24 +39,14 @@ const state = {
     { id: "009-blueberry", name: "blueberry", price: 9, stock: 5 },
     { id: "010-eggplant", name: "eggplant", price: 10, stock: 5 },
   ],
-  cart: [
-    {
-      id: "005-avocado",
-      quantity: 10,
-    },
-    {
-      id: "001-beetroot",
-      quantity: 1,
-    },
-  ],
+  cart: [],
 };
 
-const groceryboard = document.querySelector(".item-list.store--item-list");
-const ulincart = document.querySelector(".item-list.cart--item-list");
-
 function creategrocerielists() {
+  const groceryboard = document.querySelector(".item-list.store--item-list");
   for (const good of state.goods) {
-    createsingleitem(good);
+    let grocerylist = createsingleitem(good);
+    groceryboard.append(grocerylist);
   }
 }
 
@@ -71,52 +61,37 @@ function createsingleitem(good) {
 
   const btnEl = document.createElement("button");
   btnEl.innerText = "Add to cart";
-
-  //   btnEl.addEventListener('click', function(){})
-
+  btnEl.addEventListener("click", function () {
+    quantity++;
+    let exist = state.cart.find(function (data) {
+      return data.id === good.id;
+    });
+    if (exist) {
+      let spanincart = document.querySelector(`.${good.name}`);
+      increaseQuantity(exist, spanincart);
+    } else {
+      let quantity = 1;
+      additemtocart(good, quantity);
+    }
+  });
   divEl.append(imgEl, btnEl);
   grocerylist.append(divEl);
-  groceryboard.append(grocerylist);
+  return grocerylist;
 }
 
-function additemtocart(targetItem) {
-  const foundItem = state.cart.find(function (cartItem) {
-    return cartItem.id === targetItem.id;
-  });
-
-  if (foundItem === undefined) {
-    const cartItem = {
-      id: targetItem.id,
-      quantity: 1,
-    };
-    state.cart.push(cartItem);
-  } else {
-    foundItem.quantity++;
-  }
-}
-
-function rendercarts() {
-  for (const item of state.cart) {
-    renderitemincart(item);
-  }
-}
-
-function renderitemincart(cartItem) {
+function additemtocart(good, quantity) {
+  let ulincart = document.querySelector(".cart--item-list");
   let listincart = document.createElement("li");
   listincart.setAttribute("class", "list-in-cart");
   let imgincart = document.createElement("img");
   imgincart.setAttribute("class", "cart--item-icon");
-  imgincart.setAttribute("src", `assets/icons/${cartItem.id}.svg`);
-
-  const newgood = state.goods.find(function (good) {
-    return good.id === cartItem.id;
-  });
+  imgincart.setAttribute("src", `assets/icons/${good.id}.svg`);
 
   let pincart = document.createElement("p");
-  pincart.innerText = newgood.name;
+  pincart.innerText = good.name;
 
   let spanprice = document.createElement("span");
-  spanprice.innerText = ` £ ${newgood.price}`;
+  spanprice.innerText = ` £ ${good.price}`;
   pincart.append(spanprice);
 
   let btnminusincart = document.createElement("button");
@@ -124,13 +99,13 @@ function renderitemincart(cartItem) {
   btnminusincart.innerText = "-";
 
   btnminusincart.addEventListener("click", function () {
-    decrease(cartItem, spanincart, listincart);
+    decrease(cartdata, spanincart, listincart);
   });
 
   let spanincart = document.createElement("span");
-  spanincart.setAttribute("class", `quantity-text center ${newgood.name}`);
+  spanincart.setAttribute("class", `quantity-text center ${good.name}`);
 
-  spanincart.innerText = cartItem.quantity;
+  spanincart.innerText = quantity;
 
   let btnplusincart = document.createElement("button");
   btnplusincart.setAttribute("class", "quantity-btn remove-btn center");
@@ -146,10 +121,17 @@ function renderitemincart(cartItem) {
     spanincart,
     btnplusincart
   );
-  state.cart.push(cartItem);
   ulincart.append(listincart);
-  console.log(listincart);
+
+  const cartdata = {
+    id: good.id,
+    name: good.name,
+    price: good.price,
+    quantity: quantity,
+  };
+  state.cart.push(cartdata);
   calculateprice();
+  return listincart;
 }
 
 function calculateprice() {
@@ -164,7 +146,6 @@ function calculateprice() {
 function increaseQuantity(cartdata, spanincart) {
   ++cartdata.quantity;
   spanincart.innerText = cartdata.quantity;
-  //need to render all cart list again
   if (cartdata.quantity > 5) {
     alert("no more stock");
     cartdata.quantity = 5;
@@ -177,12 +158,10 @@ function decrease(cartdata, spanincart, listincart) {
   --cartdata.quantity;
   spanincart.innerText = cartdata.quantity;
   if (cartdata.quantity <= 0) {
-    state.cart.pop();
     listincart.remove();
-    //need to render all cart list again
+    state.cart.pop();
   }
   calculateprice();
 }
 
 creategrocerielists();
-rendercarts();
